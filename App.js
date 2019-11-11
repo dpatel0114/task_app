@@ -15,9 +15,9 @@ function loadEventListeners(){
 function addTask(e){
     e.preventDefault()
 
-    // if(taskInput.value === ''){
-    //     alert('Add a Task')
-    // }
+    if(taskInput.value === ''){
+        alert('Add a Task')
+    }
 
     // Create li element, add class and innerText
     const li = document.createElement('li')

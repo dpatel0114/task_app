@@ -1,8 +1,9 @@
-const taskInput = document.getElementById('task')
 const form = document.getElementById('task-form')
-const clearBtn = document.getElementsByClassName('clear-tasks')
+const taskList = document.querySelector('.collection')
+const clearBtn = document.querySelector('.clear-tasks')
 const filter = document.getElementById('filter')
-const taskList = document.getElementsByClassName('collection')
+const taskInput = document.getElementById('task')
+
 
 // Load event listener 
 loadEventListeners();
@@ -10,19 +11,29 @@ loadEventListeners();
 // Load all event listener
 function loadEventListeners(){
     form.addEventListener('submit', addTask);
+
+    // Remove task event 
+    taskList.addEventListener('click', removeTask);
+
+    // Clear task event
+    clearBtn.addEventListener('click', clearTasks);
+
+    //Filter task event
+    filter.addEventListener('keyup', filterTasks)
+
 }
 
 function addTask(e){
-    e.preventDefault()
 
     if(taskInput.value === ''){
-        alert('Add a Task')
+       return  alert('Add a Task')
     }
 
     // Create li element, add class and innerText
     const li = document.createElement('li')
     li.className = 'collection-item'
     li.innerText = taskInput.value
+    // li.appendChild(document.createTextNode(taskInput.value));
 
     // Create link element, add class and innerHTML
     const link = document.createElement('a')
@@ -31,12 +42,43 @@ function addTask(e){
 
     // Append link to li 
     li.appendChild(link)
-    
-
-    // Clear input 
-    taskInput.value = ''
 
     // Append li to ul 
-    taskList[0].appendChild(li)
+    taskList.appendChild(li)
+
+     // Clear input 
+     taskInput.value = ''
+     e.preventDefault()
+
+}
+
+function removeTask(e){
+    if(e.target.parentElement.classList.contains('delete-item')){
+        if(confirm('Are you sure?')){
+        e.target.parentElement.parentElement.remove()
+        }
+    }
+}
+
+function clearTasks(e){
+    // taskList.innerHTML = ''
+
+    //Fast
+    while(taskList.firstChild){
+        taskList.removeChild(taskList.firstChild)
+
+    }
+}
+
+function filterTasks(e){
+    const text = e.target.value.toLowerCase();
+    document.querySelectorAll('.collection-item').forEach(function(task){
+        const item = task.firstChild.textContent;
+        if(item.toLowerCase().indexOf(text) != -1){
+            task.style.display = 'block'
+        }else{
+            task.style.display = 'none'
+        }
+    })
 
 }
